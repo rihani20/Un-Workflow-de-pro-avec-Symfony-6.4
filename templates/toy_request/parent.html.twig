@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ToyRequest - Validation des parents
+{% endblock %}
+
+{% block body %}
+
+	{% for label, messages in app.flashes(['success']) %}
+		{% for message in messages %}
+			<div class="flash-{{ label }}">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+
+	{% for toy in toys %}
+
+		<h2>{{toy.name}}</h2>
+        <p>Demande de {{ toy.user.email }}</p>
+
+		{% if workflow_can(toy, 'to_dad_ok') %}
+			<a type="button" class="btn btn-primary btn-lg" href="{{ path('app_change', {'id': toy.id, 'to': 'to_dad_ok'}) }}">Papa valide</a>
+		{% endif %}
+
+        {% if workflow_can(toy, 'to_mum_ok') %}
+			<a type="button" class="btn btn-primary btn-lg" href="{{ path('app_change', {'id': toy.id, 'to': 'to_mum_ok'}) }}">Maman valide</a>
+		{% endif %}
+
+        {% if workflow_can(toy, 'to_order') %}
+			<a type="button" class="btn btn-primary btn-lg" href="{{ path('app_change', {'id': toy.id, 'to': 'to_order'}) }}">Passer la commande</a>
+		{% endif %}
+
+        {% if workflow_can(toy, 'to_ordered') %}
+			<a type="button" class="btn btn-primary btn-lg" href="{{ path('app_change', {'id': toy.id, 'to': 'to_ordered'}) }}">La commande est en cours de livraison</a>
+		{% endif %}
+
+        {% if workflow_can(toy, 'to_received') %}
+			<a type="button" class="btn btn-primary btn-lg" href="{{ path('app_change', {'id': toy.id, 'to': 'to_received'}) }}">Valider la reception de la commande</a>
+		{% endif %}
+
+		<hr>
+
+	{% endfor %}
+
+{% endblock %}
